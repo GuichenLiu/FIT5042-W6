@@ -29,9 +29,6 @@ public class ComparePropertySessionBean implements ComparePropertySessionBeanRem
     
     @PersistenceContext
     private EntityManager entityManager;
-    
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
 
     @Override
     public void addPropertyID(int propertyID) {
@@ -45,41 +42,28 @@ public class ComparePropertySessionBean implements ComparePropertySessionBeanRem
 
     @Override
     public int bestPerRoom() {
-        Integer bestID=0;
-        Property P;
+        Integer bestPropertyID=0;
+        Property property;
         int numberOfRooms;
-        double price;
-        double bestPerRoom=100000000.00;
+        double bestPrice;
+        double bestPerRoom=9999.99;
         for(Integer propertyID : list)
         {
-            P=entityManager.find(Property.class, propertyID);
-            numberOfRooms=P.getNumberOfBedrooms();
-            price=P.getPrice();
-            if(price/numberOfRooms<bestPerRoom)
+            property=entityManager.find(Property.class, propertyID);
+            numberOfRooms=property.getNumberOfBedrooms();
+            bestPrice=property.getPrice();
+            if(bestPrice/numberOfRooms<bestPerRoom)
             {
-                bestPerRoom=price/numberOfRooms;
-                bestID=P.getPropertyId();
+                bestPerRoom=bestPrice/numberOfRooms;
+                bestPropertyID=property.getPropertyId();
             }
         }
-        return bestID;
+        return bestPropertyID;
     }
-
-    /**
-     *
-     * @return 
-     * @throws javax.ejb.CreateException
-     * @throws java.rmi.RemoteException
-     */
+    
     @PostConstruct
     public void init() {
         list=new ArrayList<>();
-    }
-
-    public ComparePropertySessionBeanRemote create() throws CreateException, RemoteException {
-        return null;
-    }
-
-    public void ejbCreate() throws CreateException {
     }
 
 }
